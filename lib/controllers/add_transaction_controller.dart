@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddTransactionController extends GetxController {
   final Rx<String> _transactionType = ''.obs;
@@ -28,5 +29,12 @@ class AddTransactionController extends GetxController {
     _selectedImage.value = path;
 
     Get.back();
+  }
+  RxString pickedImage =''.obs;
+  pickImage()async{
+    final image =await ImagePicker().pickImage(source: ImageSource.gallery);
+    if(image != null){
+ pickedImage.value = image.path;
+    }
   }
 }

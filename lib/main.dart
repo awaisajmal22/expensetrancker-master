@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_expense_tracker_app/constants/theme.dart';
+import 'package:flutter_expense_tracker_app/controllers/language_controller.dart';
 import 'package:flutter_expense_tracker_app/controllers/theme_controller.dart';
 import 'package:flutter_expense_tracker_app/providers/database_provider.dart';
 import 'package:flutter_expense_tracker_app/routes.dart';
-import 'package:flutter_expense_tracker_app/views/screens/home_screen.dart';
+import 'package:flutter_expense_tracker_app/views/screens/nav_bar_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'ads/ad_callback.dart';
 
@@ -28,6 +30,7 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
   final ThemeController _themeController = Get.put(ThemeController());
+  final LanguageController _languageController = Get.put(LanguageController());
   final RouteGenerator _routeGenerator = RouteGenerator();
 
   @override
@@ -35,6 +38,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AdsCallBack()),
+        
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
@@ -42,6 +46,9 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
         builder: (context, child) {
           return GetMaterialApp(
+            locale: Locale(_languageController.selectedLanguageCode),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             debugShowCheckedModeBanner: false,
             defaultTransition: Transition.rightToLeftWithFade,
             transitionDuration: Duration(milliseconds: 1000),

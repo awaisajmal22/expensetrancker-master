@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker_app/constants/colors.dart';
-import 'package:flutter_expense_tracker_app/controllers/home_controller.dart';
+import 'package:flutter_expense_tracker_app/controllers/nav_bar_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Bar extends StatelessWidget {
   final String label;
-  final double totalAmount;
-  final double percentage;
-  final bool isExpense;
+  double totalAmount;
+  double percentage;
+  bool isExpense;
   Bar({
     Key? key,
     required this.isExpense,
@@ -16,9 +16,10 @@ class Bar extends StatelessWidget {
     required this.totalAmount,
     required this.percentage,
   }) : super(key: key);
-  final HomeController _homeController = Get.find();
+  final NavBarController _navBarController = Get.find();
   @override
   Widget build(BuildContext context) {
+    print("per per $percentage");
     return Obx(() => Expanded(
           child: Column(
             children: [
@@ -26,7 +27,7 @@ class Bar extends StatelessWidget {
                 height: 15.h,
                 child: FittedBox(
                   child: Text(
-                      '${_homeController.selectedCurrency.symbol}${totalAmount.toStringAsFixed(0)}'),
+                      '${_navBarController.selectedCurrency.symbol}${totalAmount.toStringAsFixed(0)}'),
                 ),
               ),
               SizedBox(
@@ -50,7 +51,7 @@ class Bar extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.r),
-                          color: isExpense ? pinkClr : primaryColor,
+                          color: isExpense == true ? Colors.red : Colors.green,
                         ),
                       ),
                     ),

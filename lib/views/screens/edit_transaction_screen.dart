@@ -4,9 +4,12 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker_app/constants/categories.dart';
 import 'package:flutter_expense_tracker_app/constants/colors.dart';
+import 'package:flutter_expense_tracker_app/constants/mystyle.dart';
 import 'package:flutter_expense_tracker_app/constants/theme.dart';
 import 'package:flutter_expense_tracker_app/controllers/add_transaction_controller.dart';
+import 'package:flutter_expense_tracker_app/controllers/language_controller.dart';
 import 'package:flutter_expense_tracker_app/controllers/theme_controller.dart';
+import 'package:flutter_expense_tracker_app/extension/localization_extension.dart';
 import 'package:flutter_expense_tracker_app/models/transaction.dart';
 import 'package:flutter_expense_tracker_app/providers/database_provider.dart';
 import 'package:flutter_expense_tracker_app/views/widgets/input_field.dart';
@@ -35,8 +38,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
   final TextEditingController _nameController = TextEditingController();
 
   final TextEditingController _amountController = TextEditingController();
-
-  final List<String> _transactionTypes = ['Income', 'Expense'];
+  final LanguageController _languageController = Get.put(LanguageController());
   String? _transactionType;
   String? _selectedDate;
   String? _selectedCategory;
@@ -62,10 +64,16 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> _transactionTypes = [
+      context.local.income,
+      context.local.expense
+    ];
     return Obx(() {
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: _appBar(),
+        appBar: _appBar(
+          context: context,
+        ),
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
           child: Column(
@@ -74,10 +82,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Transaction Image',
-                    style: Themes().labelStyle,
-                  ),
+                  // Text(
+                  //   'Transaction Image',
+                  //   style: Themes().labelStyle,
+                  // ),
                   TextButton.icon(
                       onPressed: () async {
                         await DatabaseProvider.deleteTransaction(widget.tm.id!);
@@ -88,7 +96,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                         color: pinkClr,
                       ),
                       label: Text(
-                        'Delete transaction',
+                        context.local.deleteTransaction,
                         style: TextStyle(
                           color: pinkClr,
                         ),
@@ -98,18 +106,18 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
               SizedBox(
                 height: 8.h,
               ),
-              _selectImage(context),
+              // _selectImage(context),
               SizedBox(
                 height: 8.h,
               ),
               InputField(
-                hint: 'Enter transaction name',
-                label: 'Transaction Name',
+                hint: context.local.transactionName,
+                label: context.local.transactionName,
                 controller: _nameController,
               ),
               InputField(
-                hint: 'Enter transaction amount',
-                label: 'Transaction Amount',
+                hint: context.local.transactionAmount,
+                label: context.local.transactionAmount,
                 controller: _amountController,
               ),
               Row(
@@ -119,7 +127,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       hint: _addTransactionController.selectedDate.isNotEmpty
                           ? _addTransactionController.selectedDate
                           : _selectedTime!,
-                      label: 'Date',
+                      label: context.local.date,
                       widget: IconButton(
                         onPressed: () => _getDateFromUser(context),
                         icon: Icon(
@@ -137,7 +145,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                       hint: _addTransactionController.selectedTime.isNotEmpty
                           ? _addTransactionController.selectedTime
                           : _selectedTime!,
-                      label: 'Time',
+                      label: context.local.time,
                       widget: IconButton(
                         onPressed: () => _getTimeFromUser(context),
                         icon: Icon(
@@ -153,7 +161,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                 hint: _addTransactionController.selectedCategory.isNotEmpty
                     ? _addTransactionController.selectedCategory
                     : _selectedCategory!,
-                label: 'Category',
+                label: context.local.category,
                 widget: IconButton(
                     onPressed: () => _showDialog(context, true),
                     icon: Icon(
@@ -165,7 +173,7 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
                     ? _addTransactionController.selectedMode
                     : _selectedMode!,
                 isAmount: true,
-                label: 'Mode',
+                label: context.local.mode,
                 widget: IconButton(
                     onPressed: () => _showDialog(context, false),
                     icon: Icon(
@@ -175,11 +183,15 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: primaryColor,
-          onPressed: () => _updateTransaction(),
-          child: Icon(
-            Icons.add,
+        floatingActionButton: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: FloatingActionButton(
+            backgroundColor: primaryColor,
+            onPressed: () => _updateTransaction(),
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -187,49 +199,50 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
     });
   }
 
-  _selectImage(BuildContext context) {
-    return _addTransactionController.selectedImage.isNotEmpty
-        ? GestureDetector(
-            onTap: () => _showOptionsDialog(context),
-            child: CircleAvatar(
-              radius: 30.r,
-              backgroundImage: FileImage(
-                File(_addTransactionController.selectedImage),
-              ),
-            ),
-          )
-        : _selectedImage!.isNotEmpty
-            ? GestureDetector(
-                onTap: () => _showOptionsDialog(context),
-                child: CircleAvatar(
-                  radius: 30.r,
-                  backgroundImage: FileImage(
-                    File(_selectedImage!),
-                  ),
-                ),
-              )
-            : GestureDetector(
-                onTap: () => _showOptionsDialog(context),
-                child: CircleAvatar(
-                  radius: 30.r,
-                  backgroundColor: Get.isDarkMode
-                      ? Colors.grey.shade800
-                      : Colors.grey.shade300,
-                  child: Center(
-                    child: Icon(
-                      Icons.add_a_photo,
-                      color: _themeController.color,
-                    ),
-                  ),
-                ),
-              );
-  }
+  // _selectImage(BuildContext context) {
+  //   return _addTransactionController.selectedImage.isNotEmpty
+  //       ? GestureDetector(
+  //           onTap: () => _showOptionsDialog(context),
+  //           child: CircleAvatar(
+  //             radius: 30.r,
+  //             backgroundImage: FileImage(
+  //               File(_addTransactionController.selectedImage),
+  //             ),
+  //           ),
+  //         )
+  //       : _selectedImage!.isNotEmpty
+  //           ? GestureDetector(
+  //               onTap: () => _showOptionsDialog(context),
+  //               child: CircleAvatar(
+  //                 radius: 30.r,
+  //                 backgroundImage: FileImage(
+  //                   File(_selectedImage!),
+  //                 ),
+  //               ),
+  //             )
+  //           : GestureDetector(
+  //               onTap: () => _showOptionsDialog(context),
+  //               child: CircleAvatar(
+  //                 radius: 30.r,
+  //                 backgroundColor: Get.isDarkMode
+  //                     ? Colors.grey.shade800
+  //                     : Colors.grey.shade300,
+  //                 child: Center(
+  //                   child: Icon(
+  //                     Icons.add_a_photo,
+  //                     color: _themeController.color,
+  //                   ),
+  //                 ),
+  //               ),
+  //             );
+  // }
 
   _updateTransaction() async {
+    print(_addTransactionController.transactionType);
     if (_nameController.text.isEmpty || _amountController.text.isEmpty) {
       Get.snackbar(
-        'Required',
-        'All fields are requried',
+        context.local.required,
+        context.local.requiredall,
         backgroundColor:
             Get.isDarkMode ? Color(0xFF212121) : Colors.grey.shade100,
         colorText: pinkClr,
@@ -237,9 +250,10 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
     } else {
       final TransactionModel transactionModel = TransactionModel(
         id: widget.tm.id!,
-        type: _addTransactionController.transactionType.isNotEmpty
-            ? _addTransactionController.transactionType
-            : _transactionType!,
+        type: _addTransactionController.transactionType.isEmpty
+            // || _addTransactionController.transactionType == "Income"|| _addTransactionController.transactionType == "آمدنی"
+            ? _transactionType!
+            : _addTransactionController.transactionType,
         image: _addTransactionController.selectedImage.isNotEmpty
             ? _addTransactionController.selectedImage
             : _selectedImage!,
@@ -264,84 +278,121 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
     }
   }
 
-  _showOptionsDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (context) => SimpleDialog(
-              children: [
-                SimpleDialogOption(
-                  onPressed: () async {
-                    final image = await ImagePicker().pickImage(
-                      source: ImageSource.gallery,
-                    );
-                    if (image != null) {
-                      _addTransactionController.updateSelectedImage(image.path);
-                    }
-                  },
-                  child: Row(children: [
-                    Icon(Icons.image),
-                    Padding(
-                      padding: EdgeInsets.all(7),
-                      child: Text(
-                        'Galley',
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                    )
-                  ]),
-                ),
-                SimpleDialogOption(
-                  onPressed: () async {
-                    final image = await ImagePicker().pickImage(
-                      source: ImageSource.camera,
-                    );
-                    if (image != null) {
-                      _addTransactionController.updateSelectedImage(image.path);
-                    }
-                  },
-                  child: Row(children: [
-                    Icon(Icons.camera),
-                    Padding(
-                      padding: EdgeInsets.all(7),
-                      child: Text(
-                        'Camera',
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                    )
-                  ]),
-                ),
-                SimpleDialogOption(
-                  onPressed: () => Get.back(),
-                  child: Row(children: [
-                    Icon(Icons.cancel),
-                    Padding(
-                      padding: EdgeInsets.all(7),
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                    )
-                  ]),
-                ),
-              ],
-            ));
-  }
+  // _showOptionsDialog(BuildContext context) {
+  //   return showDialog(
+  //       context: context,
+  //       builder: (context) => SimpleDialog(
+  //             children: [
+  //               SimpleDialogOption(
+  //                 onPressed: () async {
+  //                   final image = await ImagePicker().pickImage(
+  //                     source: ImageSource.gallery,
+  //                   );
+  //                   if (image != null) {
+  //                     _addTransactionController.updateSelectedImage(image.path);
+  //                   }
+  //                 },
+  //                 child: Row(children: [
+  //                   Icon(Icons.image),
+  //                   Padding(
+  //                     padding: EdgeInsets.all(7),
+  //                     child: Text(
+  //                       'Galley',
+  //                       style: TextStyle(
+  //                         fontSize: 20.sp,
+  //                       ),
+  //                     ),
+  //                   )
+  //                 ]),
+  //               ),
+  //               SimpleDialogOption(
+  //                 onPressed: () async {
+  //                   final image = await ImagePicker().pickImage(
+  //                     source: ImageSource.camera,
+  //                   );
+  //                   if (image != null) {
+  //                     _addTransactionController.updateSelectedImage(image.path);
+  //                   }
+  //                 },
+  //                 child: Row(children: [
+  //                   Icon(Icons.camera),
+  //                   Padding(
+  //                     padding: EdgeInsets.all(7),
+  //                     child: Text(
+  //                       'Camera',
+  //                       style: TextStyle(
+  //                         fontSize: 20.sp,
+  //                       ),
+  //                     ),
+  //                   )
+  //                 ]),
+  //               ),
+  //               SimpleDialogOption(
+  //                 onPressed: () => Get.back(),
+  //                 child: Row(children: [
+  //                   Icon(Icons.cancel),
+  //                   Padding(
+  //                     padding: EdgeInsets.all(7),
+  //                     child: Text(
+  //                       'Cancel',
+  //                       style: TextStyle(
+  //                         fontSize: 20.sp,
+  //                       ),
+  //                     ),
+  //                   )
+  //                 ]),
+  //               ),
+  //             ],
+  //           ));
+  // }
 
   _showDialog(BuildContext context, bool isCategories) {
+    final _categories = [
+      Get.context!.local.other,
+      Get.context!.local.bills,
+      Get.context!.local.clothes,
+      Get.context!.local.eatingOut,
+      Get.context!.local.education,
+      Get.context!.local.entertainment,
+      Get.context!.local.food,
+      Get.context!.local.fruits,
+      Get.context!.local.fuel,
+      Get.context!.local.general,
+      Get.context!.local.gifts,
+      Get.context!.local.holiday,
+      Get.context!.local.home,
+      Get.context!.local.job,
+      Get.context!.local.kids,
+      Get.context!.local.misc,
+      Get.context!.local.music,
+      Get.context!.local.pets,
+      Get.context!.local.shopping,
+      Get.context!.local.sports,
+      Get.context!.local.tickets,
+      Get.context!.local.transportation,
+      Get.context!.local.travel,
+      Get.context!.local.wages,
+    ];
+    final _cashModes = [
+      Get.context!.local.other,
+      Get.context!.local.cash,
+      Get.context!.local.creditCard,
+      Get.context!.local.debitCard,
+      Get.context!.local.netBanking,
+      Get.context!.local.cheque,
+    ];
+
     Get.defaultDialog(
-      title: isCategories ? 'Select Category' : 'Select Mode',
+      title: isCategories
+          ? context.local.selectCategory
+          : context.local.selectMode,
       content: SizedBox(
         width: MediaQuery.of(context).size.width * .7,
         height: MediaQuery.of(context).size.height * .4,
         child: ListView.builder(
-          itemCount: isCategories ? categories.length : cashModes.length,
+          itemCount: isCategories ? _categories.length : _cashModes.length,
           itemBuilder: (context, i) {
-            final data = isCategories ? categories[i] : cashModes[i];
+            final data = isCategories ? _categories[i] : _cashModes[i];
             return ListTile(
               onTap: () {
                 isCategories
@@ -381,16 +432,24 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
         lastDate: DateTime(2122));
 
     if (pickerDate != null) {
-      _addTransactionController
-          .updateSelectedDate(DateFormat.yMd().format(pickerDate));
+      _addTransactionController.updateSelectedDate(
+          DateFormat.yMd(_languageController.selectedLanguageCode)
+              .format(pickerDate));
     }
   }
 
-  _appBar() {
+  _appBar({
+    required BuildContext context,
+  }) {
+    final List<String> _transactionTypes = [
+      context.local.income,
+      context.local.expense
+    ];
+    final size = MediaQuery.of(context).size;
     return AppBar(
       backgroundColor: Colors.transparent,
       title: Text(
-        'Edit Transaction',
+        context.local.editTransaction,
         style: TextStyle(color: _themeController.color),
       ),
       leading: IconButton(
@@ -399,42 +458,66 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
       actions: [
         Row(
           children: [
-            Text(
-              _addTransactionController.transactionType.isEmpty
-                  ? _transactionType!
-                  : _addTransactionController.transactionType,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: _themeController.color,
-              ),
-            ),
-            SizedBox(
-              width: 40,
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  // customItemsHeight: 10,
-                  customButton: Icon(
-                    Icons.keyboard_arrow_down,
-                    color: _themeController.color,
+            Container(
+              margin: EdgeInsets.only(right: 10),
+              padding:
+                  EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                      color: Get.isDarkMode ? Colors.white : Color(0xff222222),
+                      width: 1)),
+              child: Row(
+                children: [
+                  Text(
+                    _addTransactionController.transactionType.isEmpty ||
+                            _addTransactionController.transactionType ==
+                                context.local.income ||
+                            _addTransactionController.transactionType ==
+                                "Income" ||
+                            _addTransactionController.transactionType == "آمدنی"
+                        ? _transactionTypes[0]
+                        : _addTransactionController.transactionType,
                   ),
-                  items: _transactionTypes
-                      .map(
-                        (item) => DropdownMenuItem(
-                          value: item,
-                          child: Text(
-                            item,
-                          ),
+                  SizedBox(
+                    width: size.width * 0.070,
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        padding: EdgeInsets.all(0),
+                        // customItemsHeight: 10,
+                        isExpanded: true,
+
+                        icon: Icon(
+                          Icons.keyboard_arrow_down,
+                          color: _themeController.color,
                         ),
-                      )
-                      .toList(),
-                  onChanged: (val) {
-                    _addTransactionController
-                        .changeTransactionType((val as String));
-                  },
-                  // itemHeight: 30.h,
-                  // dropdownPadding: EdgeInsets.all(4),
-                  // dropdownWidth: 105.w,
-                ),
+                        items: _transactionTypes
+                            .map(
+                              (item) => DropdownMenuItem(
+                                value: item,
+                                child: FittedBox(
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (val) {
+                          _addTransactionController
+                              .changeTransactionType((val as String));
+                        },
+                        //  itemHeight: 30.h,
+                        //   dropdownPadding: EdgeInsets.all(4),
+                        //   dropdownWidth: 105.w,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  )
+                ],
               ),
             ),
           ],

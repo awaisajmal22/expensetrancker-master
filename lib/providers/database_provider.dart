@@ -7,8 +7,8 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseProvider {
   static Database? _db;
   static final int _version = 1;
-  static final String _tableName = 'transactions';
-  static final String _path = 'transactions.db';
+  static final String _tableName = 'my_expense_data';
+  static final String _path = 'my_expense_data.db';
 
   static Future<void> initDb() async {
     if (_db != null) {
@@ -20,7 +20,7 @@ class DatabaseProvider {
           version: _version, onCreate: (db, version) => db.execute('''
          CREATE TABLE $_tableName(
           id STRING PRIMARY KEY,
-          type TEXT, image TEXT, name TEXT, amount TEXT, 
+          type TEXT, image TEXT, name TEXT, amount TEXT,description TEXT,
           date TEXT, time TEXT, category TEXT, mode TEXT)
         '''));
     } catch (e) {
@@ -51,6 +51,7 @@ class DatabaseProvider {
       date = ?,
       time = ?,
       category = ?,
+      description = ?,
       mode = ?
       WHERE id = ? 
 ''', [

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker_app/constants/colors.dart';
+import 'package:flutter_expense_tracker_app/constants/mystyle.dart';
 import 'package:flutter_expense_tracker_app/models/transaction.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -20,33 +21,31 @@ class TransactionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: transaction.image!.isEmpty
-          ? CircleAvatar(
-              // radius: 16.r,
-              backgroundColor: isIncome
-                  ? Colors.green.withOpacity(.3)
-                  : Colors.red.withOpacity(.3),
-              child: Icon(
-                isIncome
-                    ? Icons.keyboard_double_arrow_up
-                    : Icons.keyboard_double_arrow_down,
-                color: isIncome ? greenClr : redClr,
-              ),
-            )
-          : CircleAvatar(backgroundImage: FileImage(File(transaction.image!))),
+      leading:
+          // transaction.image!.isEmpty
+          //     ?
+          CircleAvatar(
+        // radius: 16.r,
+        backgroundColor: isIncome
+            ? Colors.green.withOpacity(.3)
+            : Colors.red.withOpacity(.3),
+        child: Icon(
+          isIncome
+              ? Icons.keyboard_double_arrow_up
+              : Icons.keyboard_double_arrow_down,
+          color: isIncome ? greenClr : redClr,
+        ),
+      ),
+      // : CircleAvatar(backgroundImage: FileImage(File(transaction.image!)
+      // )),
       title: Text(
         transaction.name!,
         style: TextStyle(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.bold,
-        ),
+            fontSize: 16.sp, fontWeight: FontWeight.bold, fontFamily: 'Inter'),
       ),
       subtitle: Text(
-        'Category: ${transaction.category}',
-        style: TextStyle(
-          color: Colors.grey,
-          fontSize: 15,
-        ),
+        transaction.time!,
+        style: TextStyle(fontSize: 12, color: Colors.grey, fontFamily: 'Inter'),
       ),
       trailing: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -55,22 +54,15 @@ class TransactionTile extends StatelessWidget {
             height: 7.h,
           ),
           Text(
-            formatAmount,
-            style: TextStyle(
+            isIncome == true ? "$formatAmount" : "$formatAmount",
+            style: myStyle(
               fontWeight: FontWeight.bold,
-              color: isIncome ? greenClr : redClr,
+              textColor: isIncome ? greenClr : redClr,
               fontSize: 16.sp,
             ),
           ),
           SizedBox(
             height: 5.h,
-          ),
-          Text(
-            transaction.time!,
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.grey,
-            ),
           ),
         ],
       ),

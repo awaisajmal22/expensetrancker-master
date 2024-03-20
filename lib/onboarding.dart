@@ -1,16 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_expense_tracker_app/views/screens/home_screen.dart';
+import 'package:flutter_expense_tracker_app/ads/internstitialads.dart';
+import 'package:flutter_expense_tracker_app/ads/openMobAds.dart';
+import 'package:flutter_expense_tracker_app/extension/localization_extension.dart';
+import 'package:flutter_expense_tracker_app/views/screens/nav_bar_screen.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class Onboarding extends StatelessWidget {
-  const Onboarding({super.key});
+  Onboarding({super.key});
+  AppOpenAdManager appOpenAdManager = AppOpenAdManager();
+
+  Future<void> getAdsData() async {
+    AdmobHelper admobHelper = AdmobHelper();
+    admobHelper.initialization();
+    appOpenAdManager.loadAd();
+  }
 
   @override
   Widget build(BuildContext context) {
+    getAdsData().then((value) {
+      Future.delayed(const Duration(seconds: 20), () {
+        if (AppOpenAdManager.isLoaded) {
+          appOpenAdManager.showAdIfAvailable(context);
+
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => Onboarding()),
+          // );
+        } else {
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => Onboarding()),
+          // );
+        }
+      });
+    });
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       body: Column(
         children: [
           Stack(
@@ -53,14 +81,14 @@ class Onboarding extends StatelessWidget {
           ),
           Center(
               child: Text(
-            'Track Smarter',
+            context.local.onboardingTitle1,
             style: TextStyle(
                 color: Color(0xff2788FF),
                 fontWeight: FontWeight.w600,
                 fontSize: 26),
           )),
           Center(
-              child: Text('Save More',
+              child: Text(context.local.onboardingTitle2,
                   style: TextStyle(
                       color: Color(0xff2788FF),
                       fontWeight: FontWeight.w600,
@@ -68,7 +96,7 @@ class Onboarding extends StatelessWidget {
           ElevatedButton(
             onPressed: () async {
               // Navigator.pushNamed(context, '/homepage');
-              await Get.offAll(HomeScreen());
+              await Get.offAll(NavBarScreen());
             },
             style: ButtonStyle(
               fixedSize: MaterialStateProperty.all(
@@ -84,7 +112,7 @@ class Onboarding extends StatelessWidget {
               ),
             ),
             child: Text(
-              'Get Started',
+              context.local.onboardingButtonText,
               style: TextStyle(color: Colors.white),
             ),
           )

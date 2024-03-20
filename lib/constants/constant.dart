@@ -8,7 +8,7 @@ class Constant {
 
   static const String OpenAds = "ca-app-pub-6484057617448956/5938119123";
   //Unity App Id
-
+static const String appPlaystoreUrl ="https://play.google.com/store/apps/details?id=com.vconekt.flutter_expense_tracker_app";
   //if you want Admob ads need to set ADS KEY "0" if facebook ads "1" else Unity ads "2"
   static const String ADSKEY = "0";
 

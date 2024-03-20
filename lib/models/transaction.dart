@@ -8,10 +8,12 @@ class TransactionModel {
   final String? time;
   final String? category;
   final String? mode;
+  final String? description;
 
   TransactionModel({
     this.id,
     this.type,
+    this.description,
     this.image,
     this.name,
     this.amount,
@@ -29,6 +31,7 @@ class TransactionModel {
         name: json['name'],
         date: json['date'],
         time: json['time'],
+        description: json['description'],
         category: json['category'],
         mode: json['mode'],
       );
@@ -40,6 +43,7 @@ class TransactionModel {
         'name': name,
         'amount': amount,
         'date': date,
+        'description': description,
         'time': time,
         'category': category,
         'mode': mode,

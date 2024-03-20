@@ -1,11 +1,19 @@
+import 'package:flutter_expense_tracker_app/extension/localization_extension.dart';
+import 'package:get/get.dart';
+
 class Currency {
   final String currency;
   final String symbol;
   Currency({required this.currency, required this.symbol});
   static List<Currency> get currencies {
     final List<Map<String, dynamic>> json = [
-      {"currency": "USD", "symbol": "\$"},
-      {"currency": "RS", "symbol": "Rs"},
+      {"currency": Get.context!.local.usd, "symbol": "\$"},
+      {"currency": Get.context!.local.indonesia, "symbol": "Rp"},
+      {"currency": Get.context!.local.japan, "symbol": "¥"},
+      {"currency": Get.context!.local.russia, "symbol": "₽"},
+      {"currency": Get.context!.local.germany, "symbol": "€"},
+      {"currency": Get.context!.local.pak, "symbol": "Rs"},
+
       // {"currency": "EUR", "symbol": "€"},
       // {"currency": "AED", "symbol": "AED"},
       // {"currency": "AFN", "symbol": "Af"},

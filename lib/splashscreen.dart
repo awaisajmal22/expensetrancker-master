@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expense_tracker_app/onboarding.dart';
-import 'package:flutter_expense_tracker_app/views/screens/home_screen.dart';
+import 'package:flutter_expense_tracker_app/views/screens/nav_bar_screen.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
