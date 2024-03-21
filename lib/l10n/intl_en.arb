@@ -84,5 +84,10 @@
 "date":"Date",
 "deleteTransaction":"Delete Transaction",
 "required":"Required",
-"requiredall":"All fields are requried"
+"requiredall":"All fields are requried",
+"aboutus":"About us",
+"aboutVconekt1": "At Vconekt, we are a leading IT company that specializes in providing innovative solutions for businesses across various industries. With years of experience in the industry, we have a team of skilled professionals who are passionate about leveraging technology to drive business growth and success.",
+"aboutVconekt2":"Our expertise includes software development, web and mobile app development, cloud solutions, data analytics, cybersecurity, Digital Marketing and more. We are committed to staying up-to-date with the latest technology trends and best practices to ensure that our clients receive the most effective and efficient solutions.",
+"aboutVconekt3":"At Vconekt, we pride ourselves on our dedication to delivering exceptional customer service and support. We work closely with our clients to understand their unique business needs and goals, and we tailor our solutions to meet those specific requirements. Our goal is to build long-lasting relationships with our clients, and we achieve this by consistently exceeding their expectations.",
+"aboutVconekt4":"If you're looking for a reliable and innovative partner to help you navigate the complex world of technology, look no further than Vconekt. Contact us today to learn more about how we can help your business succeed."
 }

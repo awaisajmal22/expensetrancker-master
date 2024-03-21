@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,14 +68,14 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Image.asset(
-                                  'assets/icons/alert.png',
-                                  height: size.height * 0.040,
-                                  width: size.width * 0.080,
-                                ),
-                              )
+                              // GestureDetector(
+                              //   onTap: () {},
+                              //   child: Image.asset(
+                              //     'assets/icons/alert.png',
+                              //     height: size.height * 0.040,
+                              //     width: size.width * 0.080,
+                              //   ),
+                              // )
                             ],
                           )
                         ],

@@ -7,9 +7,12 @@ import 'package:flutter_expense_tracker_app/controllers/nav_bar_controller.dart'
 import 'package:flutter_expense_tracker_app/controllers/settings_controller.dart';
 import 'package:flutter_expense_tracker_app/controllers/theme_controller.dart';
 import 'package:flutter_expense_tracker_app/extension/localization_extension.dart';
+import 'package:flutter_expense_tracker_app/extension/size_extension.dart';
+import 'package:flutter_expense_tracker_app/views/screens/about_screen.dart';
 import 'package:flutter_expense_tracker_app/views/screens/currency_screen.dart';
 import 'package:flutter_expense_tracker_app/views/screens/language_screen.dart';
 import 'package:flutter_expense_tracker_app/views/screens/theme_screen.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
@@ -24,6 +27,61 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget _socialMediaIcons =
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      GestureDetector(
+        onTap: () async {
+          if (await canLaunch(Constant.facebookUrl)) {
+            await launch(Constant.facebookUrl);
+          } else {
+            throw 'Could not launch ${Constant.facebookUrl}';
+          }
+        },
+        child: Icon(
+          FontAwesomeIcons.facebook,
+          size: context.sizer.width * 0.1,
+        ),
+      ),
+      GestureDetector(
+        onTap: () async {
+          if (await canLaunch(Constant.instagramUrl)) {
+            await launch(Constant.instagramUrl);
+          } else {
+            throw 'Could not launch ${Constant.instagramUrl}';
+          }
+        },
+        child: Icon(
+          FontAwesomeIcons.instagram,
+          size: context.sizer.width * 0.1,
+        ),
+      ),
+      GestureDetector(
+        onTap: () async {
+          if (await canLaunch(Constant.twitterUrl)) {
+            await launch(Constant.twitterUrl);
+          } else {
+            throw 'Could not launch ${Constant.twitterUrl}';
+          }
+        },
+        child: Icon(
+          FontAwesomeIcons.twitter,
+          size: context.sizer.width * 0.1,
+        ),
+      ),
+      GestureDetector(
+        onTap: () async {
+          if (await canLaunch(Constant.linkdinUrl)) {
+            await launch(Constant.linkdinUrl);
+          } else {
+            throw 'Could not launch ${Constant.linkdinUrl}';
+          }
+        },
+        child: Icon(
+          FontAwesomeIcons.linkedin,
+          size: context.sizer.width * 0.1,
+        ),
+      ),
+    ]);
     RxList<SettingsModel> _settingsList = <SettingsModel>[
       SettingsModel(
           onTap: () {
@@ -43,9 +101,14 @@ class SettingScreen extends StatelessWidget {
           },
           subtitle: '',
           title: context.local.themeTitle),
+      // SettingsModel(
+      //     onTap: () {}, subtitle: '', title: context.local.notification),
       SettingsModel(
-          onTap: () {}, subtitle: '', title: context.local.notification),
-      SettingsModel(onTap: () {}, subtitle: '', title: context.local.about),
+          onTap: () {
+            Get.to(AboutUsScreen());
+          },
+          subtitle: '',
+          title: context.local.about),
       SettingsModel(
           onTap: () async {
             if (await canLaunch(Constant.appPlaystoreUrl)) {
@@ -73,8 +136,10 @@ class SettingScreen extends StatelessWidget {
             context.local.settings,
           ),
         ),
-        Expanded(
+        Flexible(
             child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
                 itemCount: _settingsList.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
@@ -91,7 +156,8 @@ class SettingScreen extends StatelessWidget {
                           Row(
                             children: [
                               if (index == 0)
-                                Text(_navBarController.selectedCurrency.symbol),
+                                Obx(() => Text(
+                                    _navBarController.selectedCurrency.symbol)),
                               if (index == 1)
                                 Text(_languageController.selectedLanguage),
                               if (index == 2)
@@ -113,7 +179,11 @@ class SettingScreen extends StatelessWidget {
                       ),
                     ),
                   );
-                }))
+                })),
+        SizedBox(
+          height: context.sizer.height * 0.05,
+        ),
+        _socialMediaIcons
       ],
     );
   }

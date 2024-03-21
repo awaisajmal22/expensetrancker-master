@@ -20,5 +20,9 @@ static const String appPlaystoreUrl ="https://play.google.com/store/apps/details
   static const String FAILED = "0";
   static const String MYPREFERENCE = "mypref";
   static const String adsInterval = "ads_interval";
+  static const String facebookUrl ="https://www.facebook.com/vconektofficial/?locale=fy_NL&paipv=0&eav=AfbiAvygYIjJJ9yJ6UvJHJQBuMYC70O7eEU-9NW9lCMueaQfIqioEb5b94mB3QdcXUg&_rdr";
+  static const String twitterUrl ="https://twitter.com/vconektofficial/status/1711707140841517280";
+  static const linkdinUrl="https://pk.linkedin.com/company/vconektofficial";
+  static const instagramUrl ="https://www.instagram.com/vconektofficial/";
 
 }
