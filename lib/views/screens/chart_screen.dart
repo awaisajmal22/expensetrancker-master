@@ -47,9 +47,9 @@ class ChartScreen extends StatelessWidget {
               isExpense: _chartController.isExpense.value,
               myTransactions: _homeController.myTransactions,
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * .04.h,
-            ),
+            // SizedBox(
+            //   height: MediaQuery.of(context).size.height * .01,
+            // ),
             _homeController.myTransactions.isEmpty
                 ? Container()
                 : Padding(
@@ -96,7 +96,7 @@ class ChartScreen extends StatelessWidget {
                     ),
                   ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.51,
+              height: MediaQuery.of(context).size.height * 0.4,
               // color: Colors.red,
               child: Column(
                 children: [
@@ -109,7 +109,7 @@ class ChartScreen extends StatelessWidget {
                             onTap: () => Get.to(() => AllTransactionsScreen()),
                             child: Text(
                               context.local.showAllTransaction,
-                              style: myStyle(),
+                              style: myStyle(textColor: _themeController.color),
                             ),
                           ),
                         )

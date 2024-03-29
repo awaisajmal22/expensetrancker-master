@@ -7,6 +7,7 @@ import 'package:flutter_expense_tracker_app/controllers/nav_bar_controller.dart'
 import 'package:flutter_expense_tracker_app/controllers/theme_controller.dart';
 import 'package:flutter_expense_tracker_app/extension/localization_extension.dart';
 import 'package:flutter_expense_tracker_app/models/transaction.dart';
+import 'package:flutter_expense_tracker_app/views/screens/edit_transaction_screen.dart';
 import 'package:flutter_expense_tracker_app/views/screens/nav_bar_screen.dart';
 import 'package:flutter_expense_tracker_app/views/widgets/transaction_tile.dart';
 import 'package:get/get.dart';
@@ -235,29 +236,35 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         TransactionModel _transcation =
                             _navBarController.myTransactions[index];
-                        return TransactionTile(
-                            transaction: TransactionModel(
-                              image: _transcation.image,
-                              id: _transcation.id,
-                              type: _transcation.type,
-                              name: _transcation.name,
-                              amount: _transcation.type == "آمدنی" ||
+                        return GestureDetector(
+                          onTap: () async{
+                             await Get.to(() => EditTransactionScreen(tm: _transcation));
+                  _navBarController.getTransactions();
+                          },
+                          child: TransactionTile(
+                              transaction: TransactionModel(
+                                image: _transcation.image,
+                                id: _transcation.id,
+                                type: _transcation.type,
+                                name: _transcation.name,
+                                amount: _transcation.type == "آمدنی" ||
+                                        _transcation.type == "Income"
+                                    ? "+ ${_navBarController.selectedCurrency.symbol}${_transcation.amount}"
+                                    : "- ${_navBarController.selectedCurrency.symbol}${_transcation.amount}",
+                                time: _transcation.time,
+                                date: _transcation.date,
+                                category: _transcation.category,
+                                mode: _transcation.mode,
+                              ),
+                              formatAmount: _transcation.type == "آمدنی" ||
                                       _transcation.type == "Income"
                                   ? "+ ${_navBarController.selectedCurrency.symbol}${_transcation.amount}"
                                   : "- ${_navBarController.selectedCurrency.symbol}${_transcation.amount}",
-                              time: _transcation.time,
-                              date: _transcation.date,
-                              category: _transcation.category,
-                              mode: _transcation.mode,
-                            ),
-                            formatAmount: _transcation.type == "آمدنی" ||
-                                    _transcation.type == "Income"
-                                ? "+ ${_navBarController.selectedCurrency.symbol}${_transcation.amount}"
-                                : "- ${_navBarController.selectedCurrency.symbol}${_transcation.amount}",
-                            isIncome: _transcation.type == "آمدنی" ||
-                                    _transcation.type == "Income"
-                                ? true
-                                : false);
+                              isIncome: _transcation.type == "آمدنی" ||
+                                      _transcation.type == "Income"
+                                  ? true
+                                  : false),
+                        );
                       }))
             ],
           );

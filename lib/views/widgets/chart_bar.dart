@@ -47,7 +47,7 @@ class Bar extends StatelessWidget {
                           : Colors.grey.shade100,
                     )),
                     FractionallySizedBox(
-                      heightFactor: percentage,
+                      heightFactor: percentage.isNaN  ? 0 : percentage,
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.r),

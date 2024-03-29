@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AdsCallBack()),
-        
       ],
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
@@ -51,7 +50,7 @@ class MyApp extends StatelessWidget {
             supportedLocales: AppLocalizations.supportedLocales,
             debugShowCheckedModeBanner: false,
             defaultTransition: Transition.rightToLeftWithFade,
-            transitionDuration: Duration(milliseconds: 1000),
+            transitionDuration: Duration(milliseconds: 300),
             title: 'Flutter Expense Tracker App',
             theme: Themes.lightTheme,
             themeMode: _themeController.theme,

@@ -74,13 +74,14 @@ class NavBarController extends GetxController {
   getTimeString(BuildContext context) {
     if (hours >= 1 && hours <= 12) {
       greeting.value = context.local.morningTitle;
-    } else if (hours >= 12 && hours <= 16) {
+    } else if (hours >= 12 && hours <= 18) {
       greeting.value = context.local.afternoonTitle;
-    } else if (hours >= 16 && hours <= 21) {
+    } else if (hours >= 18 && hours <= 24) {
       greeting.value = context.local.eveningTitle;
-    } else if (hours >= 21 && hours <= 24) {
-      greeting.value = context.local.nightTitle;
     }
+    // else if (hours >= 21 && hours <= 24) {
+    //   greeting.value = context.local.nightTitle;
+    // }
   }
 
   updateSelectedCurrency(Currency currency, int index) async {
